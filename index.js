@@ -68,6 +68,33 @@ app.post('/posts', async (req, res) => {
     }
 });
 
+// Delete a post by ID
+app.delete('/posts/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deletedPost = await posts.findByIdAndDelete(id);
+  
+      if (!deletedPost) {
+        return res.status(404).json({
+          message: 'Post not found',
+          success: false,
+        });
+      }
+  
+      res.status(200).json({
+        message: 'Post deleted successfully',
+        success: true,
+        deletedPost,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: 'Error deleting post',
+        success: false,
+        error,
+      });
+    }
+  });
+  
 
 app.listen(8000, () => {
     console.log('Server is running on port 8000')
